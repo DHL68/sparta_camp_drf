@@ -26,7 +26,7 @@ class UserView(APIView):  # CBV 방식
         return Response({"message": "delete method!"})
 
 class UserAPIView(APIView):
-    permission_classes = [permissions.AllowAny]
+    # permission_classes = [permissions.AllowAny]
     
     # 로그인
     def post(self, request):

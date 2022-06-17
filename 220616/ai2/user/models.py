@@ -71,3 +71,24 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+
+class Hobby(models.Model):
+    name = models.CharField("취미", max_length=50)
+    def __str__(self):
+        return self.name
+
+class UserProfile(models.Model):
+
+    user = models.OneToOneField(User, verbose_name="사용자", on_delete=models.CASCADE)
+    introduction = models.TextField("자기소개", null=True, blank=True)
+    birthday = models.DateField("생일")
+    age = models.IntegerField("나이")
+    hobby = models.ManyToManyField(Hobby, verbose_name="취미")
+
+    def __str__(self):
+        return f"{self.user.username} 님의 프로필입니다."
+
+# user - user detail : 1:1
+# 한 유저가 두 프로필을 가질 수는 없음
+
+# 쿼리를 날려서 crud를 한다
