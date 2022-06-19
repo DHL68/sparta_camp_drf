@@ -1,6 +1,14 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
+from rest_framework import status
+
+from user.serializers import UserSerializer
+from user.serializers import ArticleSerializer
+
+from user.models import User
+from user.models import UserProfile
+from user.models import Hobby
 
 from django.contrib.auth import login, logout, authenticate
 
@@ -11,7 +19,21 @@ class UserView(APIView):  # CBV 방식
     permission_classes = [permissions.IsAuthenticated]  # 로그인 된 사용자만 view 조회 가능
     def get(self, request):
     # 사용자 정보 조회
-        return Response({"message": "get method!"})
+        user = request.user
+        # serializer 에 queryset 을 인자로 줄 경우 many=True 옵션을 사용해야 한다.
+        serializerd_user_data = UserSerializer(user).data
+
+        '''
+        회원 가입한 모든 대상자
+        all_users = User.objects.all()
+
+        return Response(UserSerializer(all_users, many=True).data)
+        '''
+
+        # 사용자의 게시글 정보
+        serializerd_article_data = ArticleSerializer(user).data
+
+        return Response(serializerd_user_data, serializerd_article_data, status=status.HTTP_200_OK)
 
     def post(self, request):
     # 회원가입
@@ -27,7 +49,7 @@ class UserView(APIView):  # CBV 방식
 
 class UserAPIView(APIView):
     # permission_classes = [permissions.AllowAny]
-    
+
     # 로그인
     def post(self, request):
         username = request.data.get('username', '')
