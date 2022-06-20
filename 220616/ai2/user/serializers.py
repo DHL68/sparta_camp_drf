@@ -1,24 +1,6 @@
 from rest_framework import serializers
 from user.models import User, UserProfile, Hobby
-from blog.models import Article, Comment
-
-# 게시글 정보 불러오기
-
-class CommentSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Comment
-        fields = ['content', 'updated_at']
-
-class ArticleSerializer(serializers.ModelSerializer):
-
-    comment = CommentSerializer(many=True)
-
-    class Meta:
-        model = Article
-        # 게시글 정보 조회
-        fields = ['user', 'title', 'content', 'category', 'updated_at', 'comment']
-
+from blog.serializers import ArticleSerializer
 
 class HobbySerializer(serializers.ModelSerializer):
 
@@ -57,7 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
     userprofile = UserProfileSerializer()
 
     # 해당 유저의 게시글 리스트
-    userarticle = ArticleSerializer()
+    userarticle = ArticleSerializer(source="article_set" ,many=True)
     
     class Meta:
         model = User

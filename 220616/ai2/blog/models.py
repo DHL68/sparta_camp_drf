@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Category(models.Model):
-    name = models.CharField("사용자 이름", max_length=50)
+    name = models.CharField("카테고리 이름", max_length=50)
     description = models.TextField("설명")
 
     def __str__(self):
@@ -17,7 +17,7 @@ class Article(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"{self.user.username} 님이 작성하신 글입니다."
+        return f"제목 : {self.title}"
 
 class Comment(models.Model):
     # Article 에 작성한 코멘트의 출처(작성자) / CASCADE 댓글의 작성자 데이터가 없는 경우 함께 댓글 데이터 삭제 설정

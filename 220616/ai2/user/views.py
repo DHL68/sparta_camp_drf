@@ -4,11 +4,6 @@ from rest_framework import permissions
 from rest_framework import status
 
 from user.serializers import UserSerializer
-from user.serializers import ArticleSerializer
-
-from user.models import User
-from user.models import UserProfile
-from user.models import Hobby
 
 from django.contrib.auth import login, logout, authenticate
 
@@ -30,10 +25,7 @@ class UserView(APIView):  # CBV 방식
         return Response(UserSerializer(all_users, many=True).data)
         '''
 
-        # 사용자의 게시글 정보
-        serializerd_article_data = ArticleSerializer(user).data
-
-        return Response(serializerd_user_data, serializerd_article_data, status=status.HTTP_200_OK)
+        return Response(serializerd_user_data, status=status.HTTP_200_OK)
 
     def post(self, request):
     # 회원가입
