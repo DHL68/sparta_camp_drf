@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from user.models import User, UserProfile, Hobby
+from user.models import User as UserModel
+from user.models import UserProfile as UserProfileModel
+from user.models import Hobby as HobbyModel
 from blog.serializers import ArticleSerializer
 
 class HobbySerializer(serializers.ModelSerializer):
@@ -18,7 +20,7 @@ class HobbySerializer(serializers.ModelSerializer):
         return user_list
 
     class Meta:
-        model = Hobby
+        model = HobbyModel
         fields = ['name', 'same_hobby_users']
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -26,7 +28,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     hobby = HobbySerializer(many=True) # input data queryset 일 경우
 
     class Meta:
-        model = UserProfile
+        model = UserProfileModel
         # 불러오고자 하는 user 의 기본 정보와 상세 정보 불러오기
         fields = ['introduction', 'birthday', 'age', 'hobby']
         # __all__ 사용 방법도 있지만 사용하지 않는 이유는 불필요한 정보도 함께 불러오기 때문에
@@ -42,6 +44,6 @@ class UserSerializer(serializers.ModelSerializer):
     userarticle = ArticleSerializer(source="article_set" ,many=True)
     
     class Meta:
-        model = User
+        model = UserModel
         # 역참조로 userprofile 정보 불러오기
         fields = ["username", "password", "fullname", "email", "join_date", "userprofile", "userarticle"]

@@ -7,11 +7,14 @@ from user.serializers import UserSerializer
 
 from django.contrib.auth import login, logout, authenticate
 
+from ai.permissions import RegisterdMoreThanThreeDaysUser
+
 # Create your views here.
 class UserView(APIView):  # CBV 방식
     # permission_classes = [permissions.AllowAny]  # 누구나 view 조회 가능
     # permission_classes = [permissions.IsAdminUser]  # admin만 view 조회 가능
-    permission_classes = [permissions.IsAuthenticated]  # 로그인 된 사용자만 view 조회 가능
+    # permission_classes = [permissions.IsAuthenticated]  # 로그인 된 사용자만 view 조회 가능
+    permission_classes = [RegisterdMoreThanThreeDaysUser]   # 커스텀 permissions
     def get(self, request):
     # 사용자 정보 조회
         user = request.user

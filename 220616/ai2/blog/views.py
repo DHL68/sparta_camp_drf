@@ -6,11 +6,16 @@ from rest_framework.response import Response
 from blog.models import Article as ArticleModel
 from rest_framework import status
 
+from ai.permissions import RegisterdMoreThanThreeDaysUser
+
+
 # Create your views here.
 
 class ArticleView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
     # permission_classes = [permissions.AllowAny]
+
+    permission_classes = [RegisterdMoreThanThreeDaysUser]   # 커스텀 permissions
 
     def get(self, request):
         user = request.user
