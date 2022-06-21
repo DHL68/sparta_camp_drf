@@ -1,3 +1,4 @@
+from unicodedata import category
 from rest_framework import serializers
 from blog.models import Article, Comment, Category
 
@@ -12,18 +13,29 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
 
+    user = serializers.SerializerMethodField()
+
+    def get_user(self, obj):
+        return obj.user.username
+
     class Meta:
         model = Comment
-        fields = ['content', 'updated_at']
+        fields = ['user' ,'content']
 
 class ArticleSerializer(serializers.ModelSerializer):
 
     comment = CommentSerializer(many=True, source="comment_set")
 
     # 어떤 카테고리에 해당하는지 이름 정보 불러오기
-    category = CategorySerializer(many=True)
+    # .SerializerMethodField() 함수를 사용하기 위해
+    category = serializers.SerializerMethodField()
+
+    # get_이름 의 함수를 정의 한다.
+    def get_category(self, obj):
+        # 축약식을 활용해서 카테고리의 정보를 카테고리 안에 담는다.
+        return [category.name for category in obj.category.all()]
 
     class Meta:
         model = Article
         # 게시글 정보 조회
-        fields = ['user', 'title', 'content', 'category', 'updated_at', 'comment', 'category']
+        fields = ['user', 'title', 'content', 'category', 'exposure_start', 'exposure_end', 'comment', 'category']
