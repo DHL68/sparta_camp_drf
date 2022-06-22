@@ -1,13 +1,15 @@
 from unicodedata import category
 from rest_framework import serializers
-from blog.models import Article, Comment, Category
+from blog.models import Article as ArticleModel
+from blog.models import Comment as CommentModel
+from blog.models import Category as CategoryModel
 
 # 게시글 정보 불러오기
 
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Category
+        model = CategoryModel
         fields = ['name']
 
 
@@ -19,7 +21,7 @@ class CommentSerializer(serializers.ModelSerializer):
         return obj.user.username
 
     class Meta:
-        model = Comment
+        model = CommentModel
         fields = ['user' ,'content']
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -36,6 +38,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         return [category.name for category in obj.category.all()]
 
     class Meta:
-        model = Article
+        model = ArticleModel
         # 게시글 정보 조회
         fields = ['user', 'title', 'content', 'category', 'exposure_start', 'exposure_end', 'comment', 'category']
